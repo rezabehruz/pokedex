@@ -1,0 +1,12 @@
+function pokemonTemplate(pokemon, types) {
+  return /*html*/ `          
+         <article class="card">
+            <h2 class="roboto-bold">${pokemon.name}</h2>
+            <div class="card-details">
+              <div class="type-details roboto-semi-bold">
+                ${types}
+              </div>
+              <img src="${pokemon.sprites.front_default}" alt="Bulbasaur" />
+            </div>
+          </article>`;
+}
