@@ -23,10 +23,10 @@ main {
       flex-wrap: wrap;
       justify-content: center;
       gap: 3%;
-      
+
       width: 100%;
       max-width: 1440px;
-      padding: 5% 2%;
+      padding: 5% 2% 2%;
       color: #fcfcfc;
 
       .card {
@@ -41,8 +41,8 @@ main {
         background-color: #007f73;
 
         h2 {
-            font-size: 30px;
-            text-transform: capitalize;
+          font-size: 30px;
+          text-transform: capitalize;
         }
 
         .card-details {
@@ -55,10 +55,10 @@ main {
             justify-content: center;
 
             p {
-                padding:5px 10px;
-                margin: 5px;
-                border-radius: 5px;
-                background-color: #026a60;
+              padding: 5px 10px;
+              margin: 5px;
+              border-radius: 5px;
+              background-color: #026a60;
             }
           }
 
@@ -72,6 +72,28 @@ main {
 
       .card:hover {
         background-color: #03a696;
+      }
+    }
+  }
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    background-color: #fff455;
+
+    .content {
+      display: flex;
+      justify-content: center;
+      gap: 5%;
+      padding: 3%;
+      width: 100%;
+      max-width: 1440px;
+      color: #7a7676;
+      button {
+        padding: 5px 10px;
+        width: 80px;
+        border-radius: 10px;
+        background: #d4d705;
       }
     }
   }

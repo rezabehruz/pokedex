@@ -15,6 +15,10 @@ a {
     text-decoration: none;
 }
 
+button {
+ cursor: pointer;
+}
+
 
 
 /* colors: #007F73 #4CCD99 #FFC700 #FFF455*/

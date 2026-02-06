@@ -6,7 +6,7 @@ function pokemonTemplate(pokemon, types) {
               <div class="type-details roboto-semi-bold">
                 ${types}
               </div>
-              <img src="${pokemon.sprites.front_default}" alt="Bulbasaur" />
+              <img src="${pokemon.sprites.front_default}" alt="${pokemon.name}" />
             </div>
           </article>`;
 }
