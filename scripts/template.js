@@ -1,6 +1,6 @@
-function pokemonTemplate(pokemon, types) {
+function pokemonTemplate(pokemon, i, types) {
   return /*html*/ `          
-         <article class="card">
+         <article id="pokemon-${i}" class="card card1" onclick="showDialog()">
             <h2 class="roboto-bold">${pokemon.name}</h2>
             <div class="card-details">
               <div class="type-details roboto-semi-bold">

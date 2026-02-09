@@ -6,21 +6,65 @@ const countPaginationRef = document.getElementById("pagination-content");
 let totalPagination;
 let currentPagination = 1;
 
-async function renderPokemones(urlAPI) {
-  await getPokemons(urlAPI);
+let renderStartID = 1;
+
+async function renderPokemones() {
+  if (pokemons.length == 0) await getPokemons(apiURL);
+  else if (pokemons.length < renderStartID) await getPokemons(nextURL);
+  else;
 
   contentRef.innerHTML = "";
-  for (let i = 0; i < pokemons.length; i++) {
+  for (let i = renderStartID - 1; i < renderStartID + 19; i++) {
     let types = "";
-    if (pokemons[i].types.length > 0) {
+    if (pokemons[i].types.length > 0)
       for (let j = 0; j < pokemons[i].types.length; j++) {
         types += `<p> ${pokemons[i].types[j].type.name} </p>`;
       }
-    }
-    contentRef.innerHTML += pokemonTemplate(pokemons[i], types);
+    contentRef.innerHTML += pokemonTemplate(pokemons[i], i, types);
+    changeBackground(pokemons[i].types[0].type.name, i);
   }
 
   renderPagination();
+}
+
+function changeBackground(type, i) {
+  const pokemonRef = document.getElementById("pokemon-" + i);
+
+  switch (type) {
+    case "fire":
+      pokemonRef.classList.add("bg-fire");
+      break;
+    case "water":
+      pokemonRef.classList.add("bg-water");
+      break;
+    case "grass":
+      pokemonRef.classList.add("bg-grass");
+      break;
+    default:
+      break;
+  }
+}
+
+async function getPokemons(url) {
+  let response = await fetch(url);
+  response = await response.json();
+  totalPagination = Math.ceil(response.count / 20);
+  nextURL = response.next;
+  previousURL = response.previous;
+
+  for (let i = 0; i < response.results.length; i++) {
+    const pokemon = response.results[i];
+    const types = await getPokemonsTypes(response.results[i].url);
+    const sprites = await getPokemonsImages(response.results[i].url);
+    pokemon.types = types;
+    pokemon.sprites = sprites;
+    pokemons.push(pokemon);
+  }
+}
+
+function showDialog() {
+  document.getElementById("pokemon-dialog").showModal();
+  document.getElementById("pokemon-dialog").classList.add("pokemon-dialog");
 }
 
 function renderPagination() {
@@ -44,24 +88,7 @@ function renderPagination() {
   }
 }
 
-async function getPokemons(urlAPI) {
-  let response = await fetch(urlAPI);
-  response = await response.json();
-  totalPagination = Math.ceil(response.count / 20);
-  nextURL = response.next;
-  previousURL = response.previous;
-
-  pokemons.splice(0, 20);
-  for (let i = 0; i < response.results.length; i++) {
-    pokemons.push(response.results[i]);
-    const types = await getPokemonsType(response.results[i].url);
-    const sprites = await getPokemonsImages(response.results[i].url);
-    pokemons[i].types = types;
-    pokemons[i].sprites = sprites;
-  }
-}
-
-async function getPokemonsType(url) {
+async function getPokemonsTypes(url) {
   let response = await fetch(url);
   response = await response.json();
   return response.types;
@@ -74,11 +101,13 @@ async function getPokemonsImages(url) {
 }
 
 function forward() {
-  renderPokemones(nextURL);
   currentPagination++;
+  renderStartID += 20;
+  renderPokemones();
 }
 
 function backward() {
-  renderPokemones(previousURL);
   currentPagination--;
+  renderStartID -= 20;
+  renderPokemones();
 }

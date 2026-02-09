@@ -38,6 +38,7 @@ main {
         padding: 20px;
         margin-bottom: 3%;
         border-radius: 15px;
+        cursor: pointer;
         background-color: #007f73;
 
         h2 {
@@ -58,7 +59,7 @@ main {
               padding: 5px 10px;
               margin: 5px;
               border-radius: 5px;
-              background-color: #026a60;
+              background-color: #6e8c0a8e;
             }
           }
 
@@ -70,8 +71,82 @@ main {
         }
       }
 
+      .bg-grass {
+        background-color: #05d72f;
+      }
+
+      .bg-fire {
+        background-color: #ff8c00;
+      }
+
+      .bg-water {
+        background-color: #0ab4ed;
+      }
+
       .card:hover {
-        background-color: #03a696;
+        background-color: #bbd236f3;
+      }
+    }
+  }
+
+  article {
+    .pokemon-dialog {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 800px;
+      width: 600px;
+      padding: 5px;
+      border-radius: 5px;
+      outline: none;
+      .content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        color: #343c3b;
+
+        .head-content {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 300px;
+
+          h2 {
+            padding-left: 50px;
+            font-size: 30px;
+          }
+
+          .types-img {
+            display: flex;
+            justify-content: space-around;
+
+            .types {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: center;
+              gap: 10px;
+
+              p {
+                background-color: #007f73;
+                padding: 5px 10px;
+
+                border-radius: 5px;
+              }
+            }
+            img {
+              height: 300px;
+              object-fit: contain;
+            }
+          }
+        }
+
+        .main-content {
+          display: flex;
+          flex: 1;
+          background-color: rgb(252, 252, 252);
+        }
       }
     }
   }

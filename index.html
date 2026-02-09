@@ -16,7 +16,7 @@
     <script src="scripts/db.js"></script>
     <script src="scripts/apiKeys.js"></script>
   </head>
-  <body onload="renderPokemones(url)">
+  <body onload="renderPokemones()">
     <header>
       <section>
         <div class="content">here is Header</div>
@@ -26,6 +26,27 @@
       <article>
         <div id="content" class="content"></div>
       </article>
+
+      <article>
+        <dialog closedby="any" id="pokemon-dialog" class="pokemon-dialog">
+          <div class="content">
+            <div class="head-content">
+              <h2 class="roboto-bold">Balbsaur</h2>
+              <div class="types-img">
+                <div class="types">
+                  <p>fire</p>
+                  <p>water</p>
+                </div>
+                <img src="assets/img/bulbasaur.png" alt="bulbasaur" />
+              </div>
+            </div>
+            <div class="main-content">
+this is main content
+            </div>
+          </div>
+        </dialog>
+      </article>
+
       <section id="pagination" class="pagination roboto-bold">
         <div class="content">
           <button id="btn-back" onclick="backward()">Back</button>
