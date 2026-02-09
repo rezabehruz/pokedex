@@ -170,6 +170,19 @@ main {
         border-radius: 10px;
         background: #d4d705;
       }
+     
+      button:hover {
+        background-color: #cacc67;
+      }
+
+      button:active {
+        background-color: #c4c801;
+      }
+
+      button[disabled] {
+        background-color: #eced81;
+        color: #d2daa5b2;
+      }
     }
   }
 }

@@ -1,6 +1,6 @@
 const contentRef = document.getElementById("content");
 const btnBackwardRef = document.getElementById("btn-back");
-const btnForwarddRef = document.getElementById("btn-next");
+const btnForwardRef = document.getElementById("btn-next");
 const countPaginationRef = document.getElementById("pagination-content");
 
 let totalPagination;
@@ -13,7 +13,8 @@ async function renderPokemones() {
   else if (pokemons.length < renderStartID) await getPokemons(nextURL);
   else;
 
-  contentRef.innerHTML = "";
+  renderProgress("loaded");
+
   for (let i = renderStartID - 1; i < renderStartID + 19; i++) {
     let types = "";
     if (pokemons[i].types.length > 0)
@@ -25,6 +26,18 @@ async function renderPokemones() {
   }
 
   renderPagination();
+}
+
+function renderProgress(progress) {
+  if (progress == "loading") {
+    contentRef.innerHTML = "<h2> In Progress ... </h2>";
+    btnBackwardRef.disabled = true;
+    btnForwardRef.disabled = true;
+  } else {
+    contentRef.innerHTML = "";
+    btnBackwardRef.disabled = false;
+    btnForwardRef.disabled = false;
+  }
 }
 
 function changeBackground(type, i) {
@@ -46,6 +59,7 @@ function changeBackground(type, i) {
 }
 
 async function getPokemons(url) {
+  renderProgress("loading");
   let response = await fetch(url);
   response = await response.json();
   totalPagination = Math.ceil(response.count / 20);
@@ -54,8 +68,8 @@ async function getPokemons(url) {
 
   for (let i = 0; i < response.results.length; i++) {
     const pokemon = response.results[i];
-    const types = await getPokemonsTypes(response.results[i].url);
-    const sprites = await getPokemonsImages(response.results[i].url);
+    const types = await getPokemonTypes(pokemon.url);
+    const sprites = await getPokemonImages(pokemon.url);
     pokemon.types = types;
     pokemon.sprites = sprites;
     pokemons.push(pokemon);
@@ -88,13 +102,13 @@ function renderPagination() {
   }
 }
 
-async function getPokemonsTypes(url) {
+async function getPokemonTypes(url) {
   let response = await fetch(url);
   response = await response.json();
   return response.types;
 }
 
-async function getPokemonsImages(url) {
+async function getPokemonImages(url) {
   let response = await fetch(url);
   response = await response.json();
   return response.sprites;
