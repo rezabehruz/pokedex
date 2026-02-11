@@ -1,5 +1,5 @@
 html {
-  scrollbar-color: stable;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -39,16 +39,16 @@ header {
         padding: 5px;
       }
 
-      input[type="submit"]{
-       background-color: #c4c801;
-       cursor: pointer;
+      input[type="submit"] {
+        background-color: #c4c801;
+        cursor: pointer;
       }
-      input[type="submit"]:hover{
-       background-color: #e9ea92;
+      input[type="submit"]:hover {
+        background-color: #e9ea92;
       }
-      input[type="submit"]:active{
-       background-color: #9da001;
-       cursor: pointer;
+      input[type="submit"]:active {
+        background-color: #9da001;
+        cursor: pointer;
       }
     }
   }
@@ -128,6 +128,10 @@ main {
       .card:hover {
         background-color: #bbd236f3;
       }
+
+      .progress {
+        font-size: 50px;
+      }
     }
   }
 
@@ -146,7 +150,7 @@ main {
         flex-direction: column;
 
         flex-wrap: nowrap;
-        height: 100%;
+        min-height: 100%;
         width: 100%;
         padding: 2%;
         color: #343c3b;
@@ -195,8 +199,8 @@ main {
             display: flex;
             background-color: #c4c801;
 
-            .active-details{
-             background-color: #999c01;
+            .active-details {
+              background-color: #999c01;
             }
 
             a {
@@ -236,7 +240,6 @@ main {
               gap: 10px;
               height: 300px;
               padding: 20px 0 0 20px;
-              
             }
 
             .sprite-content {
@@ -250,13 +253,12 @@ main {
                 object-fit: contain;
               }
             }
-
-         
           }
         }
         .footer-content {
           display: flex;
           justify-content: space-around;
+          top: 20px;
 
           button {
             background-color: #c4c801;
@@ -324,9 +326,86 @@ footer {
     height: 150px;
     background-color: #ffc700;
     .content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       width: 100%;
       max-width: 1440px;
       color: #7e8482;
+
+      img {
+        width: 150px;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+@media (max-width: 1280px) {
+  main {
+    .content {
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  header {
+    section {
+      .content {
+        img {
+          height: 60px;
+        }
+
+        h1 {
+          display: none;
+        }
+
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+        input {
+          width: 150px;
+        }
+
+        input[type="submit"] {
+          width: 80px;
+          left: 70px;
+        }
+      }
+    }
+  }
+
+  main {
+    article {
+      .pokemon-dialog {
+        height: 600px;
+        padding: 0;
+        .content {
+          .head-content {
+            /* height: 200px; */
+            .types-img {
+              img {
+                height: 150px;
+              }
+            }
+          }
+          .main-content {
+            .details-content {
+              height: 250px;
+            
+              .sprite-content {
+                flex-direction: column;
+                align-items: center;
+                img {
+                  height: 70px;
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
