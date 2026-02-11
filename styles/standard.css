@@ -1,24 +1,20 @@
 * {
-    position: relative;
-    box-sizing: border-box;
-    scroll-behavior: smooth;
-    font-family: inherit;
-    border: inherit;
-    color: inherit;
-    background-color: inherit;
-    margin: 0;
-    padding: 0;
+  position: relative;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  font-family: inherit;
+  border: inherit;
+  color: inherit;
+  background-color: inherit;
+  margin: 0;
+  padding: 0;
 }
 
 a {
-    list-style-type: none;
-    text-decoration: none;
+  list-style-type: none;
+  text-decoration: none;
 }
 
 button {
- cursor: pointer;
+  cursor: pointer;
 }
-
-
-
-/* colors: #007F73 #4CCD99 #FFC700 #FFF455*/
