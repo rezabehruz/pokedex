@@ -1,1 +1,2 @@
 const pokemons = [];
+const searchResultPokemons = [];

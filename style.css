@@ -15,9 +15,41 @@ header {
     height: 150px;
     background-color: #ffc700;
     .content {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       width: 100%;
       max-width: 1440px;
       color: #7e8482;
+
+      img {
+        height: 100px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 40px;
+      }
+
+      input {
+        background-color: wheat;
+        font-size: 25px;
+        outline: none;
+        border-radius: 5px;
+        padding: 5px;
+      }
+
+      input[type="submit"]{
+       background-color: #c4c801;
+       cursor: pointer;
+      }
+      input[type="submit"]:hover{
+       background-color: #e9ea92;
+      }
+      input[type="submit"]:active{
+       background-color: #9da001;
+       cursor: pointer;
+      }
     }
   }
 }
@@ -33,7 +65,7 @@ main {
       flex-wrap: wrap;
       justify-content: center;
       gap: 3%;
-
+      min-height: 95vh;
       width: 100%;
       max-width: 1440px;
       padding: 5% 2% 2%;

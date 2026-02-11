@@ -1,12 +1,12 @@
 function pokemonTemplate(i, types) {
   return /*html*/ `          
          <article id="pokemon-${i}" class="card card1" onclick="showDialog(${i}, '${types}')">
-            <h2 class="roboto-bold">${pokemons[i].name}</h2>
+            <h2 class="roboto-bold">${renderPokemonsArr[i].name}</h2>
             <div class="card-details">
               <div class="type-details roboto-semi-bold">
                 ${types}
               </div>
-              <img src="${pokemons[i].sprites.front_default}" alt="${pokemons[i].name}" />
+              <img src="${renderPokemonsArr[i].sprites.front_default}" alt="${renderPokemonsArr[i].name}" />
             </div>
           </article>`;
 }
@@ -15,12 +15,12 @@ function dialogContentTemplate(i, types, about, stats, sprites) {
   return /*html*/ `
          <div class="content">
             <div class="head-content">
-              <h2 class="roboto-bold">${pokemons[i].name}</h2>
+              <h2 class="roboto-bold">${renderPokemonsArr[i].name}</h2>
               <div class="types-img">
                 <div class="types">
                   ${types}
                 </div>
-                <img src="${pokemons[i].sprites.front_default}" alt="${pokemons[i].name}" />
+                <img src="${renderPokemonsArr[i].sprites.front_default}" alt="${renderPokemonsArr[i].name}" />
               </div>
             </div>
             <div class="main-content">
@@ -28,7 +28,6 @@ function dialogContentTemplate(i, types, about, stats, sprites) {
                 <a href="#"> <button id="btn-about" class="active-details" onclick="displayAbout()">About</button></a>
                 <a href="#"> <button id="btn-stat" onclick="displayStats()">Base Stats</button></a>
                 <a href="#"> <button id="btn-sprite" onclick="displaySprites()">Sprites</button></a>
-                
               </div>
               <div class="details-content">
                 <section id="about-content" class="about-content ">
@@ -36,13 +35,12 @@ function dialogContentTemplate(i, types, about, stats, sprites) {
                     <p>Height: ${about.height}</p>
                     <p>weight: ${about.weight}</p>
                     <p>abilities: ${about.abilities}</p>
-                  
                 </section>
                 <section id="state-content" class="d-none">${stats}</section>
                 <section id="sprite-content" class="d-none">
-                  <img src="${sprites.back_default}" alt="${pokemons[i]}">
-                  <img src="${sprites.back_shiny}" alt="${pokemons[i]}">
-                  <img src="${sprites.front_shiny}" alt="${pokemons[i]}">
+                  <img src="${sprites.back_default}" alt="${renderPokemonsArr[i]}">
+                  <img src="${sprites.back_shiny}" alt="${renderPokemonsArr[i]}">
+                  <img src="${sprites.front_shiny}" alt="${renderPokemonsArr[i]}">
                 </section>  
               </div>
             </div>

@@ -2,11 +2,17 @@ const contentRef = document.getElementById("content");
 const btnBackwardRef = document.getElementById("btn-back");
 const btnForwardRef = document.getElementById("btn-next");
 const countPaginationRef = document.getElementById("pagination-content");
+const pokemonDialogRef = document.getElementById("pokemon-dialog");
+
+let aboutContentRef, stateContentRef, spriteContentRef;
+let btnAboutRef, btnStatRef, btnSpriteRef;
+let btnNextDialogRef, btnBackDialogRef;
+
+let renderPokemonsArr = [];
+let renderStartID = 1;
 
 let totalPagination;
 let currentPagination = 1;
-
-let renderStartID = 1;
 
 async function renderPokemones() {
   if (pokemons.length == 0) await getPokemons(apiURL);
@@ -14,15 +20,15 @@ async function renderPokemones() {
   else;
 
   renderProgress("loaded");
-
+  renderPokemonsArr = pokemons;
   for (let i = renderStartID - 1; i < renderStartID + 19; i++) {
     let types = "";
-    if (pokemons[i].types.length > 0)
-      for (let j = 0; j < pokemons[i].types.length; j++) {
-        types += `<p> ${pokemons[i].types[j].type.name} </p>`;
+    if (renderPokemonsArr[i].types.length > 0)
+      for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
+        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
       }
     contentRef.innerHTML += pokemonTemplate(i, types);
-    changeBackground(pokemons[i].types[0].type.name, i);
+    changeBackground(renderPokemonsArr[i].types[0].type.name, i);
   }
 
   renderPagination();
@@ -121,12 +127,6 @@ function backward() {
   renderPokemones();
 }
 
-const pokemonDialogRef = document.getElementById("pokemon-dialog");
-
-let aboutContentRef, stateContentRef, spriteContentRef;
-let btnAboutRef, btnStatRef, btnSpriteRef;
-let btnNextDialogRef, btnBackDialogRef;
-
 async function showDialog(i, types) {
   pokemonDialogRef.showModal();
 
@@ -172,7 +172,7 @@ function getPokemonStates(pokemonDetails) {
 }
 
 async function getPokemonDetails(i) {
-  const response = await fetch(pokemons[i].url);
+  const response = await fetch(renderPokemonsArr[i].url);
   const responseResult = await response.json();
   return responseResult;
 }
@@ -207,11 +207,13 @@ function displaySprites() {
 }
 
 function nextPokemon(i) {
-  if (i < pokemons.length) {
+  // searchResultPokemons.length > 0 ? renderPokemons = searchResultPokemons : renderPokemons = pokemons ;
+  // console.log(renderPokemons);
+  if (i < renderPokemonsArr.length) {
     let types = "";
-    if (pokemons[i].types.length > 0)
-      for (let j = 0; j < pokemons[i].types.length; j++) {
-        types += `<p> ${pokemons[i].types[j].type.name} </p>`;
+    if (renderPokemonsArr[i].types.length > 0)
+      for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
+        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
       }
 
     showDialog(i, types);
@@ -223,13 +225,41 @@ function nextPokemon(i) {
 function previousPokemon(i) {
   if (i >= 0) {
     let types = "";
-    if (pokemons[i].types.length > 0)
-      for (let j = 0; j < pokemons[i].types.length; j++) {
-        types += `<p> ${pokemons[i].types[j].type.name} </p>`;
+    if (renderPokemonsArr[i].types.length > 0)
+      for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
+        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
       }
 
     showDialog(i, types);
   } else {
     btnBackDialogRef.setAttribute("class", "v-none");
   }
+}
+
+function search(event) {
+  event.preventDefault();
+  const searchValue = document.getElementById("input-search").value;
+  contentRef.innerHTML = "";
+  renderPokemonsArr = [];
+
+  for (let i = 0; i < pokemons.length; i++) {
+    if (pokemons[i].name.includes(searchValue)) {
+      renderPokemonsArr.push(pokemons[i]);
+    }
+  }
+
+  if (renderPokemonsArr.length > 0) {
+    for (let i = 0; i < renderPokemonsArr.length; i++) {
+      let types = "";
+      for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
+        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
+      }
+      contentRef.innerHTML += pokemonTemplate(i, types);
+      changeBackground(renderPokemonsArr[i].types[0].type.name, i);
+
+      searchResultPokemons.push(renderPokemonsArr[i]);
+    }
+  } else contentRef.innerHTML = "<h2> Nothing found! <h2>";
+
+  document.getElementById("pagination").setAttribute("class", "d-none");
 }
