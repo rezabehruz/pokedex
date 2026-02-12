@@ -2,6 +2,7 @@
 const contentRef = document.getElementById("content");
 const btnBackwardRef = document.getElementById("btn-back");
 const btnForwardRef = document.getElementById("btn-next");
+const paginationRef = document.getElementById("pagination");
 const countPaginationRef = document.getElementById("pagination-content");
 const pokemonDialogRef = document.getElementById("pokemon-dialog");
 
@@ -17,12 +18,10 @@ let currentPagination = 1;
 
 // endregion
 
-
 //#region render Pokemons
 async function renderPokemones() {
   if (pokemons.length == 0) await getPokemons(apiURL);
   else if (pokemons.length < renderStartID) await getPokemons(nextURL);
-  else;
 
   renderProgress("loaded");
   renderPokemonsArr = pokemons;
@@ -36,6 +35,7 @@ async function renderPokemones() {
     changeBackground(renderPokemonsArr[i].types[0].type.name, i);
   }
 
+  paginationRef.style.display = "flex";
   renderPagination();
 }
 
@@ -101,8 +101,7 @@ function changeBackground(type, i) {
 
 //#endregion
 
-
-//#region pagination  
+//#region pagination
 function renderPagination() {
   countPaginationRef.innerText = currentPagination + " of " + totalPagination;
   switch (currentPagination) {
@@ -137,7 +136,6 @@ function backward() {
 
 //#endregion
 
-
 //#region Dialog
 async function showDialog(i, types) {
   pokemonDialogRef.showModal();
@@ -156,6 +154,15 @@ async function showDialog(i, types) {
   spriteContentRef = document.getElementById("sprite-content");
   btnNextDialogRef = document.getElementById("btn-next-dialog");
   btnBackDialogRef = document.getElementById("btn-back-dialog");
+
+  crtlRenderDialog(i);
+
+}
+
+function crtlRenderDialog(i){
+  if (i+1 == renderPokemonsArr.length) btnNextDialogRef.setAttribute("class", "v-none");
+
+  if (i == 0) btnBackDialogRef.setAttribute("class", "v-none");
 }
 
 function getPokemonAbout(pokemonDetails) {
@@ -201,6 +208,7 @@ function displayStats() {
   btnStatRef.setAttribute("class", "active-details");
   btnAboutRef.classList.remove("active-details");
   btnSpriteRef.classList.remove("active-details");
+
   stateContentRef.setAttribute("class", "state-content");
   aboutContentRef.setAttribute("class", "d-none");
   spriteContentRef.setAttribute("class", "d-none");
@@ -225,8 +233,6 @@ function nextPokemon(i) {
       }
 
     showDialog(i, types);
-  } else {
-    btnNextDialogRef.setAttribute("class", "v-none");
   }
 }
 
@@ -239,9 +245,7 @@ function previousPokemon(i) {
       }
 
     showDialog(i, types);
-  } else {
-    btnBackDialogRef.setAttribute("class", "v-none");
-  }
+  } 
 }
 
 function closeDialog() {
@@ -249,7 +253,6 @@ function closeDialog() {
 }
 
 //#endregion
-
 
 //#region search
 function search(event) {
@@ -266,7 +269,6 @@ function search(event) {
   }
 
   renderToHtml();
-  
 }
 
 function renderToHtml() {
@@ -281,7 +283,7 @@ function renderToHtml() {
     }
   } else contentRef.innerHTML = "<h2> Nothing found! <h2>";
 
-  document.getElementById("pagination").setAttribute("class", "d-none");
+  paginationRef.style.display = "none";
 }
 
 //#endregion

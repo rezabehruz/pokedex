@@ -163,8 +163,9 @@ main {
             display: flex;
             justify-content: space-between;
             h2 {
-              padding-left: 50px;
+              text-transform: capitalize;
               font-size: 30px;
+              left: 50px;
             }
 
             button {
@@ -228,6 +229,7 @@ main {
             }
 
             button {
+              font-size: 16px;
               width: 100%;
               padding: 10px;
             }
@@ -279,6 +281,7 @@ main {
           top: 20px;
 
           button {
+            font-size: 16px;
             background-color: #c4c801;
             width: 80px;
             height: 30px;
@@ -315,6 +318,7 @@ main {
       max-width: 1440px;
       color: #7a7676;
       button {
+        font-size: 16px;
         padding: 5px 10px;
         width: 80px;
         border-radius: 10px;
