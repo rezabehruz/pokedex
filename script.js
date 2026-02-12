@@ -1,19 +1,24 @@
+// #region global variables
 const contentRef = document.getElementById("content");
 const btnBackwardRef = document.getElementById("btn-back");
 const btnForwardRef = document.getElementById("btn-next");
 const countPaginationRef = document.getElementById("pagination-content");
 const pokemonDialogRef = document.getElementById("pokemon-dialog");
 
+let renderPokemonsArr = [];
+let renderStartID = 1;
+
 let aboutContentRef, stateContentRef, spriteContentRef;
 let btnAboutRef, btnStatRef, btnSpriteRef;
 let btnNextDialogRef, btnBackDialogRef;
 
-let renderPokemonsArr = [];
-let renderStartID = 1;
-
 let totalPagination;
 let currentPagination = 1;
 
+// endregion
+
+
+//#region render Pokemons
 async function renderPokemones() {
   if (pokemons.length == 0) await getPokemons(apiURL);
   else if (pokemons.length < renderStartID) await getPokemons(nextURL);
@@ -46,24 +51,6 @@ function renderProgress(progress) {
   }
 }
 
-function changeBackground(type, i) {
-  const pokemonRef = document.getElementById("pokemon-" + i);
-
-  switch (type) {
-    case "fire":
-      pokemonRef.classList.add("bg-fire");
-      break;
-    case "water":
-      pokemonRef.classList.add("bg-water");
-      break;
-    case "grass":
-      pokemonRef.classList.add("bg-grass");
-      break;
-    default:
-      break;
-  }
-}
-
 async function getPokemons(url) {
   renderProgress("loading");
   let response = await fetch(url);
@@ -82,9 +69,42 @@ async function getPokemons(url) {
   }
 }
 
+async function getPokemonTypes(url) {
+  let response = await fetch(url);
+  response = await response.json();
+  return response.types;
+}
+
+async function getPokemonImages(url) {
+  let response = await fetch(url);
+  response = await response.json();
+  return response.sprites;
+}
+
+function changeBackground(type, i) {
+  const pokemonRef = document.getElementById("pokemon-" + i);
+
+  switch (type) {
+    case "fire":
+      pokemonRef.classList.add("bg-fire");
+      break;
+    case "water":
+      pokemonRef.classList.add("bg-water");
+      break;
+    case "grass":
+      pokemonRef.classList.add("bg-grass");
+      break;
+    default:
+      break;
+  }
+}
+
+//#endregion
+
+
+//#region pagination  
 function renderPagination() {
   countPaginationRef.innerText = currentPagination + " of " + totalPagination;
-
   switch (currentPagination) {
     case 1:
       btnBackwardRef.classList.add("v-none");
@@ -103,18 +123,6 @@ function renderPagination() {
   }
 }
 
-async function getPokemonTypes(url) {
-  let response = await fetch(url);
-  response = await response.json();
-  return response.types;
-}
-
-async function getPokemonImages(url) {
-  let response = await fetch(url);
-  response = await response.json();
-  return response.sprites;
-}
-
 function forward() {
   currentPagination++;
   renderStartID += 20;
@@ -127,6 +135,10 @@ function backward() {
   renderPokemones();
 }
 
+//#endregion
+
+
+//#region Dialog
 async function showDialog(i, types) {
   pokemonDialogRef.showModal();
 
@@ -134,7 +146,6 @@ async function showDialog(i, types) {
   const about = getPokemonAbout(pokemonDetails);
   const states = getPokemonStates(pokemonDetails);
   const sprites = pokemonDetails.sprites;
-
   pokemonDialogRef.innerHTML = dialogContentTemplate(i, types, about, states, sprites);
 
   btnAboutRef = document.getElementById("btn-about");
@@ -143,7 +154,6 @@ async function showDialog(i, types) {
   aboutContentRef = document.getElementById("about-content");
   stateContentRef = document.getElementById("state-content");
   spriteContentRef = document.getElementById("sprite-content");
-
   btnNextDialogRef = document.getElementById("btn-next-dialog");
   btnBackDialogRef = document.getElementById("btn-back-dialog");
 }
@@ -207,8 +217,6 @@ function displaySprites() {
 }
 
 function nextPokemon(i) {
-  // searchResultPokemons.length > 0 ? renderPokemons = searchResultPokemons : renderPokemons = pokemons ;
-  // console.log(renderPokemons);
   if (i < renderPokemonsArr.length) {
     let types = "";
     if (renderPokemonsArr[i].types.length > 0)
@@ -236,6 +244,14 @@ function previousPokemon(i) {
   }
 }
 
+function closeDialog() {
+  pokemonDialogRef.close();
+}
+
+//#endregion
+
+
+//#region search
 function search(event) {
   event.preventDefault();
   const searchValue = document.getElementById("input-search").value;
@@ -244,10 +260,16 @@ function search(event) {
 
   for (let i = 0; i < pokemons.length; i++) {
     if (pokemons[i].name.includes(searchValue)) {
+      searchResultPokemons.push(renderPokemonsArr[i]);
       renderPokemonsArr.push(pokemons[i]);
     }
   }
 
+  renderToHtml();
+  
+}
+
+function renderToHtml() {
   if (renderPokemonsArr.length > 0) {
     for (let i = 0; i < renderPokemonsArr.length; i++) {
       let types = "";
@@ -256,10 +278,10 @@ function search(event) {
       }
       contentRef.innerHTML += pokemonTemplate(i, types);
       changeBackground(renderPokemonsArr[i].types[0].type.name, i);
-
-      searchResultPokemons.push(renderPokemonsArr[i]);
     }
   } else contentRef.innerHTML = "<h2> Nothing found! <h2>";
 
   document.getElementById("pagination").setAttribute("class", "d-none");
 }
+
+//#endregion

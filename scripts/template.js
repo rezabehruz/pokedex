@@ -15,7 +15,10 @@ function dialogContentTemplate(i, types, about, stats, sprites) {
   return /*html*/ `
          <div class="content">
             <div class="head-content">
+              <div class="header-close-btn">
               <h2 class="roboto-bold">${renderPokemonsArr[i].name}</h2>
+              <button onclick="closeDialog()" class="roboto-semi-bold">close</button>
+              </div>
               <div class="types-img">
                 <div class="types">
                   ${types}
