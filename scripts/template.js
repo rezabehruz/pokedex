@@ -11,6 +11,10 @@ function pokemonTemplate(i, types) {
           </article>`;
 }
 
+function typeTemplate(type){
+  return `<p> ${type} </p>`;
+}
+
 function dialogContentTemplate(i, types, about, stats, sprites) {
   return /*html*/ `
          <div class="content">
@@ -53,4 +57,8 @@ function dialogContentTemplate(i, types, about, stats, sprites) {
             </div>
           </div>
   `;
+}
+
+function nothingFoundTemplate(){
+  return `<h2 class="roboto-bold"> Nothing found! <h2>`;
 }

@@ -1,53 +1,53 @@
 // #region global variables
-const contentRef = document.getElementById("content");
-const btnBackwardRef = document.getElementById("btn-back");
-const btnForwardRef = document.getElementById("btn-next");
-const paginationRef = document.getElementById("pagination");
-const countPaginationRef = document.getElementById("pagination-content");
+const mainContentRef = document.getElementById("main-content");
+const contentLoadingRef = document.getElementById("content-loading");
+const btnLoadMoreRef = document.getElementById("btn-load-more");
 const pokemonDialogRef = document.getElementById("pokemon-dialog");
 
-let renderPokemonsArr = [];
-let renderStartID = 1;
+let renderPokemonsArr;
+let searchResultPokemons;
+let lastRendertIndex = 0;
 
 let aboutContentRef, stateContentRef, spriteContentRef;
 let btnAboutRef, btnStatRef, btnSpriteRef;
 let btnNextDialogRef, btnBackDialogRef;
-
-let totalPagination;
-let currentPagination = 1;
 
 // endregion
 
 //#region render Pokemons
 async function renderPokemones() {
   if (pokemons.length == 0) await getPokemons(apiURL);
-  else if (pokemons.length < renderStartID) await getPokemons(nextURL);
 
-  renderProgress("loaded");
-  renderPokemonsArr = pokemons;
-  for (let i = renderStartID - 1; i < renderStartID + 19; i++) {
+  for (let i = lastRendertIndex; i < renderPokemonsArr.length; i++) {
     let types = "";
     if (renderPokemonsArr[i].types.length > 0)
       for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
-        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
+        types += typeTemplate(renderPokemonsArr[i].types[j].type.name);
       }
-    contentRef.innerHTML += pokemonTemplate(i, types);
+    mainContentRef.innerHTML += pokemonTemplate(i, types);
     changeBackground(renderPokemonsArr[i].types[0].type.name, i);
   }
 
-  paginationRef.style.display = "flex";
-  renderPagination();
+  lastRendertIndex = renderPokemonsArr.length;
+}
+
+function renderAllPokemons() {
+  lastRendertIndex = 0;
+  mainContentRef.innerHTML = "";
+  renderPokemonsArr = pokemons;
+
+  renderPokemones();
+
+  btnLoadMoreRef.classList.remove("d-none");
 }
 
 function renderProgress(progress) {
   if (progress == "loading") {
-    contentRef.innerHTML = "<h2> In Progress ... </h2>";
-    btnBackwardRef.disabled = true;
-    btnForwardRef.disabled = true;
+    contentLoadingRef.setAttribute("class", "content-loading");
+    btnLoadMoreRef.disabled = true;
   } else {
-    contentRef.innerHTML = "";
-    btnBackwardRef.disabled = false;
-    btnForwardRef.disabled = false;
+    contentLoadingRef.setAttribute("class", "d-none");
+    btnLoadMoreRef.disabled = false;
   }
 }
 
@@ -55,10 +55,7 @@ async function getPokemons(url) {
   renderProgress("loading");
   let response = await fetch(url);
   response = await response.json();
-  totalPagination = Math.ceil(response.count / 20);
   nextURL = response.next;
-  previousURL = response.previous;
-
   for (let i = 0; i < response.results.length; i++) {
     const pokemon = response.results[i];
     const types = await getPokemonTypes(pokemon.url);
@@ -67,6 +64,9 @@ async function getPokemons(url) {
     pokemon.sprites = sprites;
     pokemons.push(pokemon);
   }
+
+  renderPokemonsArr = pokemons;
+  renderProgress("loaded");
 }
 
 async function getPokemonTypes(url) {
@@ -101,36 +101,9 @@ function changeBackground(type, i) {
 
 //#endregion
 
-//#region pagination
-function renderPagination() {
-  countPaginationRef.innerText = currentPagination + " of " + totalPagination;
-  switch (currentPagination) {
-    case 1:
-      btnBackwardRef.classList.add("v-none");
-      break;
-    case 2:
-      btnBackwardRef.classList.remove("v-none");
-      break;
-    case totalPagination:
-      btnForwardRef.classList.add("v-none");
-      break;
-    case totalPagination - 1:
-      btnForwardRef.classList.remove("v-none");
-      break;
-    default:
-      break;
-  }
-}
-
-function forward() {
-  currentPagination++;
-  renderStartID += 20;
-  renderPokemones();
-}
-
-function backward() {
-  currentPagination--;
-  renderStartID -= 20;
+//#region load More
+async function loadMore() {
+  await getPokemons(nextURL);
   renderPokemones();
 }
 
@@ -156,11 +129,10 @@ async function showDialog(i, types) {
   btnBackDialogRef = document.getElementById("btn-back-dialog");
 
   crtlRenderDialog(i);
-
 }
 
-function crtlRenderDialog(i){
-  if (i+1 == renderPokemonsArr.length) btnNextDialogRef.setAttribute("class", "v-none");
+function crtlRenderDialog(i) {
+  if (i + 1 == renderPokemonsArr.length) btnNextDialogRef.setAttribute("class", "v-none");
 
   if (i == 0) btnBackDialogRef.setAttribute("class", "v-none");
 }
@@ -182,7 +154,7 @@ function getPokemonAbout(pokemonDetails) {
 function getPokemonStates(pokemonDetails) {
   let stats = "";
   for (let i = 0; i < pokemonDetails.stats.length; i++) {
-    stats += `<p> ${pokemonDetails.stats[i].stat.name} </p>`;
+    stats += `<p> ${pokemonDetails.stats[i].stat.name} : ${pokemonDetails.stats[i].base_stat}</p>`;
   }
 
   return stats;
@@ -245,7 +217,7 @@ function previousPokemon(i) {
       }
 
     showDialog(i, types);
-  } 
+  }
 }
 
 function closeDialog() {
@@ -258,15 +230,12 @@ function closeDialog() {
 function search(event) {
   event.preventDefault();
   const searchValue = document.getElementById("input-search").value;
-  contentRef.innerHTML = "";
-  renderPokemonsArr = [];
+  mainContentRef.innerHTML = "";
 
-  for (let i = 0; i < pokemons.length; i++) {
-    if (pokemons[i].name.includes(searchValue)) {
-      searchResultPokemons.push(renderPokemonsArr[i]);
-      renderPokemonsArr.push(pokemons[i]);
-    }
-  }
+  searchResultPokemons = pokemons.filter((pokemon) => pokemon.name.includes(searchValue));
+
+  if (searchResultPokemons.length > 0) renderPokemonsArr = searchResultPokemons;
+  else renderPokemonsArr = [];
 
   renderToHtml();
 }
@@ -276,14 +245,14 @@ function renderToHtml() {
     for (let i = 0; i < renderPokemonsArr.length; i++) {
       let types = "";
       for (let j = 0; j < renderPokemonsArr[i].types.length; j++) {
-        types += `<p> ${renderPokemonsArr[i].types[j].type.name} </p>`;
+        types += typeTemplate(renderPokemonsArr[i].types[j].type.name);
       }
-      contentRef.innerHTML += pokemonTemplate(i, types);
+      mainContentRef.innerHTML += pokemonTemplate(i, types);
       changeBackground(renderPokemonsArr[i].types[0].type.name, i);
     }
-  } else contentRef.innerHTML = "<h2> Nothing found! <h2>";
+  } else mainContentRef.innerHTML = nothingFoundTemplate();
 
-  paginationRef.style.display = "none";
+  btnLoadMoreRef.setAttribute("class", "d-none");
 }
 
 //#endregion

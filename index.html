@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokedex</title>
-    <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="assets/icons/favicon.ico" type="image/x-icon" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
@@ -21,13 +21,13 @@
     <header>
       <section>
         <div class="content">
-          <a href="#" onclick="renderPokemones()">
-          <img src="assets/img/logo.png" alt="Pokedex Logo">
-        </a>
+          <a href="#" onclick="renderAllPokemons()">
+            <img src="assets/img/logo.png" alt="Pokedex Logo" />
+          </a>
           <h1 class="roboto-bold">Pokedex</h1>
           <form onsubmit="search(event)">
-            <input type="text" id="input-search" required minlength="3">
-            <input type="submit" value="Search">
+            <input type="text" id="input-search" required minlength="3" />
+            <input type="submit" value="Search" />
           </form>
         </div>
       </section>
@@ -35,20 +35,20 @@
     <main>
       <article>
         <div id="content" class="content">
-          <h2 class="progress">In Progress ...</h2>
+          <div id="main-content" class="main-content"></div>
+          <div id="content-loading" class="content-loading">
+            <img id="loading-img" src="assets/img/loading-spinnar.gif" alt="loading-spinnar" class="loading-img" />
+          </div>
         </div>
       </article>
 
       <article>
-        <dialog closedby="any" id="pokemon-dialog" class="pokemon-dialog">
-        </dialog>
+        <dialog closedby="any" id="pokemon-dialog" class="pokemon-dialog"></dialog>
       </article>
 
-      <section id="pagination" class="pagination roboto-bold">
+      <section class="load-more roboto-bold">
         <div class="content">
-          <button id="btn-back" onclick="backward()" disabled>Back</button>
-          <p id="pagination-content"></p>
-          <button id="btn-next" onclick="forward()" disabled>Next</button>
+          <button id="btn-load-more" onclick="loadMore()" disabled>load more ...</button>
         </div>
       </section>
     </main>
@@ -56,7 +56,7 @@
       <section>
         <div class="content">
           <p>copyright @ 2026</p>
-          <img src="assets/img/logo.png" alt="logo">
+          <img src="assets/img/logo.png" alt="logo" />
         </div>
       </section>
     </footer>
